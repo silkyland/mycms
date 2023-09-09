@@ -11,7 +11,7 @@ class AdminCategoryController extends Controller
 {
     public function index()
     {
-    $categories = Category::all();
+        $categories = Category::paginate(5);
         $data = [
             'categories' => $categories
         ];
@@ -25,6 +25,7 @@ class AdminCategoryController extends Controller
 
     public function create()
     {
+
         return view('admin.category.create');
     }
 
@@ -35,7 +36,7 @@ class AdminCategoryController extends Controller
         ];
 
         $request->validate([
-            'name' => 'required'
+            'name' => 'required',
         ], $messages);
 
         $category = new Category();
@@ -47,17 +48,36 @@ class AdminCategoryController extends Controller
 
     public function edit($id)
     {
-        return view('admin.category.edit');
+        $category = Category::find($id);
+        $data = [
+            'category' => $category
+        ];
+        return view('admin.category.edit', $data);
     }
 
     public function update(Request $request, $id)
     {
-        //
+        $messages = [
+            'name.required' => 'โปรดกรอกชื่อหมวดหมู่'
+        ];
+
+        $request->validate([
+            'name' => 'required',
+        ], $messages);
+
+        $category = Category::find($id);
+        $category->name = $request->name;
+        $category->save();
+
+        return redirect()->route('admin.category.index')->with('success', 'แก้ไขหมวดหมู่สำเร็จ');
     }
 
 
     public function destroy($id)
     {
-        //
+        $category = Category::find($id);
+        $category->delete();
+
+        return redirect()->route('admin.category.index')->with('success', 'ลบหมวดหมู่สำเร็จ');
     }
 }

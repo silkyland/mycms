@@ -9,6 +9,17 @@ class Post extends Model
 {
     use HasFactory;
 
+    protected $table = 'posts'; // กำหนดชื่อของตารางที่ต้องการเชื่อมโยง
+
+    protected $primaryKey = 'id'; // กำหนดชื่อ Primary Key ของตารางที่ต้องการเชื่อมโยง
+
+    protected $fillable = [
+        'title',
+        'content',
+        'thumbnail',
+        'user_id',
+        'category_id'
+    ];
 
     public function user()
     {

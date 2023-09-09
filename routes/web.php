@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminBannerController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminPostController;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,7 +22,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::prefix('admin')->group(function () {
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'login'])->name('login');
+    Route::post('/login', [AuthController::class, 'postLogin'])->name('do.login');
+});
+Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.index');
     Route::get('post', [AdminPostController::class, 'index'])->name('admin.post.index');
     Route::get('post/create', [AdminPostController::class, 'create'])->name('admin.post.create');
@@ -34,8 +39,8 @@ Route::prefix('admin')->group(function () {
     Route::get('category/create', [AdminCategoryController::class, 'create'])->name('admin.category.create');
     Route::post('category', [AdminCategoryController::class, 'store'])->name('admin.category.store');
     Route::get('category/edit/{id}', [AdminCategoryController::class, 'edit'])->name('admin.category.edit');
-    Route::put('category/{id}', [AdminCategoryController::class, 'update'])->name('admin.category.update');
-    Route::get('category/{id}', [AdminCategoryController::class, 'destroy'])->name('admin.category.destroy');
+    Route::put('category/update/{id}', [AdminCategoryController::class, 'update'])->name('admin.category.update');
+    Route::get('category/delete/{id}', [AdminCategoryController::class, 'destroy'])->name('admin.category.destroy');
 
     Route::get('banner', [AdminBannerController::class, 'index'])->name('admin.banner.index');
     Route::get('banner/create', [AdminBannerController::class, 'create'])->name('admin.banner.create');

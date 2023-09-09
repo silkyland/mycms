@@ -19,7 +19,7 @@
 
     <!-- Custom styles for this template-->
     <link href="/assets/sbadmin/css/sb-admin-2.min.css" rel="stylesheet">
-
+    @yield('css')
 </head>
 
 <body id="page-top">
@@ -327,7 +327,14 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                    {{-- @auth
+                                        {{ auth()->user()->name }}
+                                    @endauth --}}
+                                    @if(auth()->check())
+                                        {{ auth()->user()->name }}
+                                    @endif
+                                </span>
                                 <img class="img-profile rounded-circle" src="/assets/sbadmin/img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
@@ -418,7 +425,7 @@
 
     <!-- Custom scripts for all pages-->
     <script src="/assets/sbadmin/js/sb-admin-2.min.js"></script>
-
+    @yield('js')
 </body>
 
 </html>
